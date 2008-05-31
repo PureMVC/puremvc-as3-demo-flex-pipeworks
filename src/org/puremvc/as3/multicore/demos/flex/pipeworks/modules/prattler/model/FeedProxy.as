@@ -40,21 +40,16 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.model
 		private var feedChange:Boolean = false;
 		
 		// Adjust starting values accordingly
-		private var url:String = "http://www.icerocket.com/search?tab=blog&q=puremvc&rss=1";
+		private var url:String = "http://weblogs.macromedia.com/mxna/xml/rss.cfm";
 
 		// Duration 1000 = 1 second
 		public var duration:uint = 3000;
 
 		private static var feed:int = 0;
 		private static var feeds:Array = [ "http://feeds.feedburner.com/oreilly/radar/atom",
-										   "http://blogsearch.google.com/blogsearch_feeds?hl=en&q=puremvc&ie=utf-8&num=10&output=atom",
-										   "http://feeds.feedburner.com/oreilly/radar/atom",
-										   "http://digg.com/rss/index.xml",
-										   "http://del.icio.us/rss/",
 										   "http://feeds.wired.com/wired/software?format=xml",
 										   "http://rss.slashdot.org/Slashdot/slashdot",
 										   "http://feeds.dzone.com/dzone/frontpage?format=xml",
-										   "http://www.icerocket.com/search?tab=blog&q=puremvc&rss=1",
 										   "http://weblogs.macromedia.com/mxna/xml/rss.cfm",
 										   ];
 		

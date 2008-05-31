@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+
+ Parts originally from: 
+ PureMVC AS3 Demo – AIR RSS Headlines 
+ Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+    pageTitle="PipeWorks - A PureMVC AS3 MultiCore Pipes Demo"
+    paddingBottom="0" paddingRight="0" paddingLeft="0"
+    backgroundGradientColors="[#325EC0,#FFFFFF]" backgroundColor="#FFFFFF" 
+    themeColor="HaloBlue" layout="vertical"
+	creationComplete="facade.startup(this)" viewSourceURL="srcview/index.html">
+
+	<mx:Metadata>
+		[Event('prattle')]
+		[Event('logLevel')]
+	</mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Button;
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+			
+			private var facade:ApplicationFacade = ApplicationFacade.getInstance(NAME);
+
+			public static const PRATTLE:String  	= "prattle";
+			public static const LOG_LEVEL:String  	= "logLevel";
+			public static const NAME:String 		= 'PipeWorks';
+			
+			[Bindable] public var logLevel:Number; 
+			
+			/**
+			 * Adds the module-manufactured LogButton to the 
+			 * view for display.
+			 */
+			public function addLogButton(logButton:Button):void
+			{
+				logBox.addChild(logButton);
+			}
+					
+			/**
+			 * Adds the module-manufactured FeedWindow to the 
+			 * view for display.
+			 */
+			public function addFeedWindow(feedWindow:DisplayObject):void
+			{
+				prattlerTile.addChild(feedWindow);
+			}
+
+			/**
+			 * Remove the module-manufactured FeedWindow from the 
+			 * view.
+			 */
+			public function removeFeedWindow(feedWindow:DisplayObject):void
+			{
+				prattlerTile.removeChild(feedWindow);
+			}
+
+			/**
+			 * Dispatch events.
+			 */
+			private function submit( action:String ):void
+			{
+				switch ( action )
+				{
+					case PRATTLE:
+						dispatchEvent( new Event( PRATTLE, true ));
+						break;
+
+					case LOG_LEVEL:
+						logLevel = cmbLogLevel.selectedIndex;
+						dispatchEvent( new Event( LOG_LEVEL, true ));
+						break;
+				}
+			}
+		]]>
+	</mx:Script>
+	<mx:Tile width="100%" height="100%" id="prattlerTile" />
+
+	<mx:ApplicationControlBar dock="true">
+
+	    <!-- The Title, and eventual container for the Log Button -->
+	    <mx:HBox id="buttonBox" horizontalAlign="left" verticalAlign="middle" width="50%" height="100%">
+	        <mx:Text text="PipeWorks" fontFamily="Verdana" fontSize="22" fontStyle="normal" color="#0559CC"/>
+	        <mx:Label id="statusLine" fontWeight="bold" text="PureMVC AS3 MultiCore / Pipes Demo"/>
+	        <mx:Button id="prattleButton" label="New Prattler" click="submit( PRATTLE )"/>
+	    </mx:HBox>
+	    
+	    <!-- Log Box -->
+	    <mx:HBox id="logBox" horizontalAlign="right" verticalAlign="middle" width="50%" height="100%">
+	    	<mx:Label text="Log Level:"/>
+	    	<mx:ComboBox id="cmbLogLevel" dataProvider="{LogMessage.LEVELS}"
+	    		change="submit( LOG_LEVEL )" 
+	    		selectedIndex="{LogMessage.INFO}"/>
+	    </mx:HBox>
+	    
+	</mx:ApplicationControlBar>
+	
+</mx:Application>

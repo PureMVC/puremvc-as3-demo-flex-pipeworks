@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks 
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	width="466" height="300" title="Log Messages" showCloseButton="true"
+	show="dg.selectedIndex=0" >
+	<mx:Script>
+		<![CDATA[
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+			import mx.collections.ArrayCollection;
+			
+			[Bindable] public var messages:ArrayCollection = new ArrayCollection();
+				
+			/**
+			 * Label function for displaying LevelName from level.
+			 */
+			private function getLevelName(item:Object, column:DataGridColumn):String
+			{
+				var logLevel:Number = LogMessage(item).logLevel;
+				if (logLevel == LogMessage.CHANGE) return 'CHANGE';
+				return LogMessage.LEVELS[LogMessage(item).logLevel];
+			}
+			
+		]]>
+		
+	</mx:Script>
+	
+	<mx:VDividedBox left="10" right="10" bottom="10" top="10">
+
+		<!-- Display Log Messages-->
+		<mx:DataGrid id="dg" dataProvider="{messages}" selectedIndex="0"
+			width="100%" height="100%">
+			<mx:columns>
+				<mx:DataGridColumn headerText="Time"  width="125" dataField="time"/>
+				<mx:DataGridColumn headerText="Level" width="75" labelFunction="getLevelName"/>
+				<mx:DataGridColumn headerText="Sender" dataField="sender"/>
+			</mx:columns>
+		</mx:DataGrid>
+		
+		<!-- Text of Selected Message -->
+		<mx:TextArea id="messageDisplay" editable="false"
+			text="{LogMessage(dg.selectedItem).message}"
+			width="100%" height="50"/>
+
+	</mx:VDividedBox>
+</mx:TitleWindow>

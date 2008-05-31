@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks - Prattler Module
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+
+ Parts originally from: 
+ PureMVC AS3 Demo – AIR RSS Headlines 
+ Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:view="org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view.components.*"
+	title="{moduleName}: {(feedArticle.channel!=null)?feedArticle.channel:'...'}" height="272" width="400" showCloseButton="true"
+	horizontalScrollPolicy="off"
+	verticalScrollPolicy="off">
+			  
+	<mx:Script>
+		<![CDATA[
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.model.vo.FeedVO;
+			
+			// The name of this module
+			[Bindable] public var moduleName:String;
+			
+			// The feed article for display.
+			[Bindable] public var feedArticle:FeedVO = new FeedVO();
+			
+			// The reading rate interval
+			[Bindable] public var interval:Number = 3;
+		]]>
+	</mx:Script>
+	
+	<!-- The Feed Article Viewer -->
+	<view:Viewer id="viewContainer" width="372" height="100%" feedArticle="{feedArticle}"/>
+
+	<!-- The Feed Controls -->
+	<mx:ControlBar>
+		<view:FeedControls id="feedControls" width="100%" height="50" interval="{interval}" />
+	</mx:ControlBar>
+
+</mx:TitleWindow>

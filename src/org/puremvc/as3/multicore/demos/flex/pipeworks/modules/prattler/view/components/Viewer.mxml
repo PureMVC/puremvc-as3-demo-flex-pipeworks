@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks - Prattler Module
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+
+ Parts originally from: 
+ PureMVC AS3 Demo – AIR RSS Headlines 
+ Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" 
+		  horizontalScrollPolicy="off"
+		  verticalScrollPolicy="off">
+		  		  
+	<mx:Script>
+		<![CDATA[
+		
+			import flash.events.*;
+			import flash.net.URLRequest;
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.model.vo.FeedVO;
+			
+			// The feed article for display			
+			[Bindable] public var feedArticle:FeedVO;
+			
+			/**
+			 * Open the article in a new window.
+			 */
+			private function readMore( url:String ):void
+			{
+				var u:URLRequest;
+			    u = new URLRequest( url );
+			 	navigateToURL(u,"_blank");
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<!-- ARTICLE TITLE TEXT -->
+	<mx:TextArea id="articletitle" text="{feedArticle.subject}" 
+		         fontFamily="Verdana" color="#000000" 
+		         top="5" left="5" right="5" height="35" 
+		         fontWeight="bold" fontSize="12" borderStyle="none" cornerRadius="0" backgroundAlpha="0.6" editable="false" selectable="false"/>
+
+	<!-- ARTICLE BODY TEXT -->
+	<mx:TextArea id="articlebody" text="{feedArticle.articlebody}" 
+		         left="5" right="5" top="40" bottom="29"
+		         fontSize="12" borderThickness="0" wordWrap="true" 
+		         editable="false" fontStyle="normal" textAlign="left" 
+		         fontFamily="Verdana" backgroundAlpha="1.0" selectable="false"/>
+		         
+	<mx:HBox left="5" right="5" bottom="5" backgroundAlpha="0.6" borderStyle="none" height="25" verticalAlign="middle">
+
+		<!-- ARTICLE DATE  -->
+		<mx:Label id="articleDate" text="{feedArticle.date}" 
+			         width="262"  fontFamily="Arial" color="#000000"
+			         fontSize="10" />
+
+		<!-- ARTICLE LINK  -->
+		<mx:LinkButton id="articlelink" label="Read more..." 
+				 visible="{feedArticle.articlelink!=null}"
+			     width="90" 
+			     fontSize="10" 
+			     click="readMore( feedArticle.articlelink )" showEffect="Fade" fontStyle="italic" rollOverColor="#99BBFF" selectionColor="#85CAFF" height="18"/>
+		
+	</mx:HBox>		         
+		     
+</mx:Canvas>

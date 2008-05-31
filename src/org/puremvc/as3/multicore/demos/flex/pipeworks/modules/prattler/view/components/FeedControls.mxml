@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks - Prattler Module
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+
+ Parts originally from: 
+ PureMVC AS3 Demo – AIR RSS Headlines 
+ Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	show="urlInput.setFocus()" verticalGap="0">
+	
+	<mx:Metadata>
+		[Event('interval')]
+		[Event('submit')]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import flash.events.*;
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.model.vo.FeedVO;
+			
+			public static const INTERVAL:String  = "interval";
+			public static const SUBMIT:String    = "submit";
+			public static const ENTER_FEED:String = "Enter an Atom 1.0, or RSS 1.0/2.0 Feed URL...";
+			
+			[Bindable] public var url:String;
+			[Bindable] public var interval:Number = 2;
+			 
+			/**
+			 * Dispatch events.
+			 */			 
+			private function submit( action:String ):void
+			{
+				switch ( action )
+				{
+					case INTERVAL:
+						dispatchEvent( new Event( INTERVAL, true  ) );
+						break;
+						
+					case SUBMIT:
+						dispatchEvent( new Event( SUBMIT, true  ) );
+						break;
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	<!-- Expose the typed URL and selected interval as API properties -->
+	<mx:Binding source="urlInput.text" destination="url"/>
+	<mx:Binding source="interval" destination="intervalSlider.value"/>
+	<mx:Binding source="intervalSlider.value" destination="interval"/>
+	
+    <!-- Reading Rate Interval Adjust -->
+	<mx:HBox width="100%"  height="22" verticalAlign="middle">	
+		<mx:Label text="Reading Rate:"/>
+		<mx:Label text="1s"/>
+		<mx:HSlider id="intervalSlider"
+					height="17" width="214" 
+					minimum="1"
+					maximum="10"
+					allowTrackClick="true"
+					snapInterval="1"
+					dataTipPlacement="top" 
+					change="submit( INTERVAL )"/>
+					
+		<mx:Label text="10s"/>
+	</mx:HBox> 
+
+	<!-- Feed URL -->
+	<mx:HBox width="100%" horizontalAlign="right" horizontalGap="3" verticalAlign="middle" paddingLeft="5" height="26">
+		
+		<!-- URL Input -->
+		<mx:TextInput id="urlInput"
+			text="{ENTER_FEED}"
+			focusIn="if(urlInput.text==ENTER_FEED){urlInput.text=''}"
+			focusOut="if (urlInput.text==''){urlInput.text=ENTER_FEED}"
+			fontSize="10" height="20" width="300" />
+		
+		<!-- Get Feed Button -->	
+		<mx:LinkButton id="submit_btn"	label="Get Feed!" 
+			enabled="{(urlInput.text!=ENTER_FEED&amp;&amp;urlInput.text!='')}" rollOverColor="#FFFFFF" 
+			  fontWeight="bold" click="submit( SUBMIT )" color="#025277"/>
+    </mx:HBox>
+    
+	
+</mx:VBox>

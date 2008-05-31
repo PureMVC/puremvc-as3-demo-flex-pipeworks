@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ PureMVC AS3 MultiCore Demo – Flex PipeWorks 
+ Copyright (c) 2008 Cliff Hall <cliff.hall@puremvc.org>
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+-->
+<mx:Button xmlns:mx="http://www.adobe.com/2006/mxml"
+	label="Log Messages: ({messages.length})"
+	>
+	<mx:Script>
+		<![CDATA[
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var messages:ArrayCollection = new ArrayCollection();
+		]]>
+	</mx:Script>
+</mx:Button>

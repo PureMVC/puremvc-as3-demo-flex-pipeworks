@@ -133,7 +133,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.common
 							break;
 						
 						default:
-							level = LogMessage.INFO;
+							level = LogMessage.DEBUG;
 							break;
 						
 					}

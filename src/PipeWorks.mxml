@@ -10,7 +10,7 @@
 -->
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
     pageTitle="PipeWorks - A PureMVC AS3 MultiCore Pipes Demo"
-    paddingBottom="0" paddingRight="0" paddingLeft="0"
+    paddingBottom="0" paddingRight="0" paddingLeft="0" paddingTop="0"
     backgroundGradientColors="[#325EC0,#FFFFFF]" backgroundColor="#FFFFFF" 
     themeColor="HaloBlue" layout="vertical"
 	creationComplete="facade.startup(this)" viewSourceURL="srcview/index.html">
@@ -80,6 +80,7 @@
 			}
 		]]>
 	</mx:Script>
+	
 	<mx:Tile width="100%" height="100%" id="prattlerTile" />
 
 	<mx:ApplicationControlBar dock="true">
@@ -96,7 +97,7 @@
 	    	<mx:Label text="Log Level:"/>
 	    	<mx:ComboBox id="cmbLogLevel" dataProvider="{LogMessage.LEVELS}"
 	    		change="submit( LOG_LEVEL )" 
-	    		selectedIndex="{LogMessage.INFO}"/>
+	    		selectedIndex="{LogMessage.DEBUG}"/>
 	    </mx:HBox>
 	    
 	</mx:ApplicationControlBar>

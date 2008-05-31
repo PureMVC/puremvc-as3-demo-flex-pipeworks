@@ -36,10 +36,17 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.controller
     {
         override public function execute(note:INotification):void
         {
+			// Create and Register the Logger Module and its Mediator
+       		facade.registerMediator(new LoggerModuleMediator());
+       		
+       		// Create and Register the Shell Junction and its Mediator
+			facade.registerMediator(new ShellJunctionMediator());
+
+			// Create and Register the Application and its Mediator
         	var app:PipeWorks = note.getBody() as PipeWorks;
        		facade.registerMediator(new ApplicationMediator(app));
-       		facade.registerMediator(new LoggerModuleMediator());
-			facade.registerMediator(new ShellJunctionMediator());
+			
+			// Request the Log Button UI from the Logger Module       		
 			sendNotification(ApplicationFacade.REQUEST_LOG_BUTTON);
         }
         

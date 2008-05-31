@@ -102,7 +102,6 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 		private function onLogLevel(event:Event):void
 		{
 			sendNotification(LogFilterMessage.SET_LOG_LEVEL,app.logLevel);
-			sendNotification(LogMessage.SEND_TO_LOG,"Log level changed to: "+LogMessage.LEVELS[app.logLevel],LogMessage.LEVELS[LogMessage.NONE]);
 		}
 
 		/**

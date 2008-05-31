@@ -55,11 +55,6 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 		 */
 		override public function onRegister():void
 		{
-//			var teeMerge:TeeMerge = new TeeMerge();
-//			var filter:Filter = new Filter(LogFilterMessage.LOG_FILTER);
-//			filter.connect(new PipeListener(this,handlePipeMessage));
-//			teeMerge.connect(filter);
-//			junction.registerPipe( STDIN, Junction.INPUT, teeMerge );
 			var teeMerge:TeeMerge = new TeeMerge();
 			var filter:Filter = new Filter( LogFilterMessage.LOG_FILTER_NAME,
 										    null,

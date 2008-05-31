@@ -5,12 +5,13 @@
  Your reuse is governed by the Creative Commons Attribution 3.0 License
 -->
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
-	width="466" height="300" title="Log Messages" showCloseButton="true"
-	show="dg.selectedIndex=0" >
+	width="100%" height="100%" title="Log Messages" showCloseButton="true"
+	show="dg.selectedIndex=0" addedEffect="{logShow}" removedEffect="{logHide}" >
 	<mx:Script>
 		<![CDATA[
-			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+			import mx.effects.easing.*;
 			import mx.collections.ArrayCollection;
+			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
 			
 			[Bindable] public var messages:ArrayCollection = new ArrayCollection();
 				
@@ -27,6 +28,9 @@
 		]]>
 		
 	</mx:Script>
+
+	<mx:Move id="logShow" yFrom="-1200" yTo="0" easingFunction="Quintic.easeOut" duration="450" />
+	<mx:Move id="logHide" yTo="-1200" easingFunction="Quintic.easeIn" duration="450"/>
 	
 	<mx:VDividedBox left="10" right="10" bottom="10" top="10">
 
@@ -37,13 +41,14 @@
 				<mx:DataGridColumn headerText="Time"  width="125" dataField="time"/>
 				<mx:DataGridColumn headerText="Level" width="75" labelFunction="getLevelName"/>
 				<mx:DataGridColumn headerText="Sender" dataField="sender"/>
+				<mx:DataGridColumn headerText="Message" dataField="message"/>
 			</mx:columns>
 		</mx:DataGrid>
 		
-		<!-- Text of Selected Message -->
+		<!-- Text of Selected Message 
 		<mx:TextArea id="messageDisplay" editable="false"
 			text="{LogMessage(dg.selectedItem).message}"
-			width="100%" height="50"/>
+			width="100%" height="50"/>-->
 
 	</mx:VDividedBox>
 </mx:TitleWindow>

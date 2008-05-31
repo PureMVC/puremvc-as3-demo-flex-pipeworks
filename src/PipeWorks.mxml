@@ -23,6 +23,7 @@
 	<mx:Script>
 		<![CDATA[
 			import mx.controls.Button;
+			import mx.effects.easing.*;
 			import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
 			import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
 			
@@ -34,15 +35,35 @@
 			
 			[Bindable] public var logLevel:Number; 
 			
+			private var logWin:DisplayObject;
+			
 			/**
 			 * Adds the module-manufactured LogButton to the 
 			 * view for display.
 			 */
-			public function addLogButton(logButton:Button):void
+			public function addLogButton(logButton:DisplayObject):void
 			{
-				logBox.addChild(logButton);
+				toolbarRight.addChild(logButton);
 			}
 					
+			/**
+			 * Adds the module-manufactured LogWindows to the 
+			 * view for display.
+			 */
+			public function addLogWindow(logWindow:DisplayObject):void
+			{
+				logBox.addChildAt(logWindow,0);
+			}
+					
+			/**
+			 * Remove the module-manufactured LogWindow from the 
+			 * view.
+			 */
+			public function removeLogWindow(logWindow:DisplayObject):void
+			{
+				logBox.removeChild(logWindow);
+			}
+
 			/**
 			 * Adds the module-manufactured FeedWindow to the 
 			 * view for display.
@@ -80,26 +101,30 @@
 			}
 		]]>
 	</mx:Script>
+
+	<mx:Resize id="resizeEffect" easingFunction="Exponential.easeInOut" duration="750"/>
 	
-	<mx:Tile width="100%" height="100%" id="prattlerTile" />
-
 	<mx:ApplicationControlBar dock="true">
-
 	    <!-- The Title, and eventual container for the Log Button -->
-	    <mx:HBox id="buttonBox" horizontalAlign="left" verticalAlign="middle" width="50%" height="100%">
+	    <mx:HBox id="toolbarLeft" horizontalAlign="left" verticalAlign="middle" width="50%" height="100%">
 	        <mx:Text text="PipeWorks" fontFamily="Verdana" fontSize="22" fontStyle="normal" color="#0559CC"/>
 	        <mx:Label id="statusLine" fontWeight="bold" text="PureMVC AS3 MultiCore / Pipes Demo"/>
 	        <mx:Button id="prattleButton" label="New Prattler" click="submit( PRATTLE )"/>
 	    </mx:HBox>
 	    
 	    <!-- Log Box -->
-	    <mx:HBox id="logBox" horizontalAlign="right" verticalAlign="middle" width="50%" height="100%">
+	    <mx:HBox id="toolbarRight" horizontalAlign="right" verticalAlign="middle" width="50%" height="100%">
 	    	<mx:Label text="Log Level:"/>
 	    	<mx:ComboBox id="cmbLogLevel" dataProvider="{LogMessage.LEVELS}"
 	    		change="submit( LOG_LEVEL )" 
 	    		selectedIndex="{LogMessage.DEBUG}"/>
 	    </mx:HBox>
-	    
 	</mx:ApplicationControlBar>
+
+	<!-- The Log Window and Prattler Tile -->
+	<mx:VDividedBox id="logBox" width="100%" height="100%" horizontalScrollPolicy="off" >
+		<mx:Tile width="100%" height="100%" id="prattlerTile" resizeEffect="{resizeEffect}"/>
+	</mx:VDividedBox>
+
 	
 </mx:Application>

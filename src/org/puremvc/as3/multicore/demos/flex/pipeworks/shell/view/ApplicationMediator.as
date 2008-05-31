@@ -11,13 +11,12 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 	import mx.containers.TitleWindow;
 	import mx.controls.Button;
 	import mx.core.UIComponent;
-	import mx.managers.PopUpManager;
 	
+	import org.puremvc.as3.multicore.interfaces.INotification;
+	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogFilterMessage;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
-	import org.puremvc.as3.multicore.interfaces.INotification;
-	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
 	
 	public class ApplicationMediator extends Mediator
 	{
@@ -69,8 +68,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 						logWindow = UIComponent(note.getBody()) as TitleWindow;
 						logWindow.addEventListener(Event.CLOSE, onLogWindowClose);
 					}
-					PopUpManager.addPopUp(UIComponent(note.getBody()), app);
-					PopUpManager.centerPopUp(logWindow); 
+					app.addLogWindow(logWindow);
 					logWindowDisplayed=true;
 					break;
 
@@ -129,7 +127,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 		 */
 		private function onLogWindowClose(event:Event):void
 		{
-			PopUpManager.removePopUp(logWindow); 
+			app.removeLogWindow(logWindow); 	
 			logWindowDisplayed=false;
 		}
 		

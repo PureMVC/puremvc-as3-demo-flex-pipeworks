@@ -49,7 +49,6 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view
 		{
 			var interests:Array = super.listNotificationInterests();
 			interests.push(ApplicationFacade.EXPORT_FEED_WINDOW);
-			interests.push(LogMessage.SEND_TO_LOG);
 			return interests;
 		}
 

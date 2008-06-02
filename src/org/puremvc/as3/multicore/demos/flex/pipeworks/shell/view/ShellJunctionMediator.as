@@ -99,7 +99,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 					// Connect the shell's STDOUT to the module's STDIN
 					var shellToModule:Pipe = new Pipe();
 					module.acceptInputPipe(JunctionMediator.STDIN, shellToModule);
-					var shellOut:IPipeFitting = junction.retrievePipe(JunctionMediator.STDIN) as IPipeFitting;
+					var shellOut:IPipeFitting = junction.retrievePipe(JunctionMediator.STDOUT) as IPipeFitting;
 					shellOut.connect(shellToModule);
 					break;
 

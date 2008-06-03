@@ -6,13 +6,15 @@
  Copyright (c) 2007-08 Simon Bailey <simon.bailey@puremvc.org>
  Your reuse is governed by the Creative Commons Attribution 3.0 License
 --------------------------------------------------------------------------
-Release Date: 05/31/08
+Release Date: 06/03/08
     Platform: ActionScript 3 / MultiCore / Flex 
      Version: 1 
-    Revision: 1
+    Revision: 2
       Author: Cliff Hall <cliff.hall@puremvc.org>
      License: Creative Commons Attribution 3.0 United States License
 --------------------------------------------------------------------------
+1.2 Corrected the STDOUT pipename in the ShellJunctionMediator and updated
+    the PrattleCommand ASDoc. 
 1.1	Corrected the bug that was causing the double notifications. 
 1.0	Initial working demo. - CLH
 

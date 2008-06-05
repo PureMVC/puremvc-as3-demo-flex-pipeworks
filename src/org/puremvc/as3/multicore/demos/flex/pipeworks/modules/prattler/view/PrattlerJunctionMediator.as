@@ -11,8 +11,8 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view
 {
 	import mx.core.UIComponent;
 	
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.JunctionMediator;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LoggingJunctionMediator;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.PipeAwareModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.UIQueryMessage;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.PrattlerModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.ApplicationFacade;
@@ -20,7 +20,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view
 	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	
-	public class PrattlerJunctionMediator extends JunctionMediator
+	public class PrattlerJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME:String = 'PrattlerJunctionMediator';
 
@@ -70,7 +70,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view
 				// Send the LogWindow UI Component 
 				case ApplicationFacade.EXPORT_FEED_WINDOW:
 					var prattlerWindowMessage:UIQueryMessage = new UIQueryMessage( UIQueryMessage.SET, PrattlerModule.FEED_WINDOW_UI, UIComponent(note.getBody()) );
-					junction.sendMessage( STDSHELL, prattlerWindowMessage );
+					junction.sendMessage( PipeAwareModule.STDSHELL, prattlerWindowMessage );
 					break;
 				
 				// And let super handle the rest (ACCEPT_OUTPUT_PIPE, ACCEPT_INPUT_PIPE, SEND_TO_LOG)								
@@ -95,15 +95,5 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.prattler.view
 				//}
 			}
 		}
-		
-		/**
-		 * The Junction for this Module.
-		 */
-		private function get junction():Junction
-		{
-			return viewComponent as Junction;
-		}
-		
-	
 	}
 }

@@ -16,6 +16,8 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.common
 		public static const LEVELS:Array = [ 'NONE', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG' ];
 		 
 		public static const SEND_TO_LOG:String = Message.BASE+'LoggerModule/sendToLog';
+
+		public static const STDLOG:String = 'standardLog';
 		
 		public function LogMessage( logLevel:int, sender:String, message:String  )
 		{

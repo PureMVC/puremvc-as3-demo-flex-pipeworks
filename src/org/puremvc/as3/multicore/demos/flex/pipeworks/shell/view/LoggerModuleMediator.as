@@ -5,16 +5,16 @@
  */
 package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 {
-	import org.puremvc.as3.multicore.interfaces.INotification;
-	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.IPipeAware;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.JunctionMediator;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.PipeAwareModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.LoggerModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
+	import org.puremvc.as3.multicore.interfaces.INotification;
+	import org.puremvc.as3.multicore.patterns.mediator.Mediator;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
 	
 	/**
 	 * Mediator for the LoggerModule.
@@ -57,8 +57,8 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 				case  ApplicationFacade.CONNECT_MODULE_TO_LOGGER:
 					var module:IPipeAware = note.getBody() as IPipeAware;
 					var pipe:Pipe = new Pipe();
-					module.acceptOutputPipe(JunctionMediator.STDLOG,pipe);
-					logger.acceptInputPipe(JunctionMediator.STDIN,pipe);
+					module.acceptOutputPipe(PipeAwareModule.STDLOG,pipe);
+					logger.acceptInputPipe(PipeAwareModule.STDIN,pipe);
 					break;
 
 				// Bidirectionally connect shell and logger on STDLOG/STDSHELL
@@ -67,14 +67,14 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 					var junction:Junction = note.getBody() as Junction;
 					
 					// Connect the shell's STDLOG to the logger's STDIN
-					var shellToLog:IPipeFitting = junction.retrievePipe(JunctionMediator.STDLOG);
-					logger.acceptInputPipe(JunctionMediator.STDIN, shellToLog);
+					var shellToLog:IPipeFitting = junction.retrievePipe(PipeAwareModule.STDLOG);
+					logger.acceptInputPipe(PipeAwareModule.STDIN, shellToLog);
 					
 					// Connect the logger's STDSHELL to the shell's STDIN
 					var logToShell:Pipe = new Pipe();
-					var shellIn:TeeMerge = junction.retrievePipe(JunctionMediator.STDIN) as TeeMerge;
+					var shellIn:TeeMerge = junction.retrievePipe(PipeAwareModule.STDIN) as TeeMerge;
 					shellIn.connectInput(logToShell);
-					logger.acceptOutputPipe(JunctionMediator.STDSHELL,logToShell);
+					logger.acceptOutputPipe(PipeAwareModule.STDSHELL,logToShell);
 					break;
 			}
 		}

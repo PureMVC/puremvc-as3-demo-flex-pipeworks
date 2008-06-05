@@ -12,8 +12,9 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.common
 	 * a component, or a SET query when it wants the module to replace
 	 * a UI component with one that is passed in.</P>
 	 * <P>
-	 * In response to a GET query, a module will send a SET query message
-	 * with the component in the bod
+	 * In response to a GET action query, a module will send a SET 
+	 * action query message with the component in the body of the 
+	 * message.</P>
 	 */
 	public class UIQueryMessage extends Message
 	{

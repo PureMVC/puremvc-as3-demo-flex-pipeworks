@@ -5,22 +5,23 @@
  */
 package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 {
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.IPipeAware;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.JunctionMediator;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.UIQueryMessage;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.LoggerModule;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.PrattlerModule;
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
 	import org.puremvc.as3.multicore.interfaces.INotification;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Pipe;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
 	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeSplit;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeAware;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.PipeAwareModule;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.UIQueryMessage;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.LoggerModule;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.PrattlerModule;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.shell.ApplicationFacade;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LoggingJunctionMediator;
 	
-	public class ShellJunctionMediator extends JunctionMediator
+	public class ShellJunctionMediator extends LoggingJunctionMediator
 	{
 		public static const NAME:String = 'ShellJunctionMediator';
 		
@@ -41,14 +42,14 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 		override public function onRegister():void
 		{
 			// The STDOUT pipe from the shell to all modules 
-			junction.registerPipe( STDOUT,  Junction.OUTPUT, new TeeSplit() );
+			junction.registerPipe( PipeAwareModule.STDOUT,  Junction.OUTPUT, new TeeSplit() );
 			
 			// The STDIN pipe to the shell from all modules 
-			junction.registerPipe( STDIN,  Junction.INPUT, new TeeMerge() );
-			junction.addPipeListener( STDIN, this, handlePipeMessage );
+			junction.registerPipe( PipeAwareModule.STDIN,  Junction.INPUT, new TeeMerge() );
+			junction.addPipeListener( PipeAwareModule.STDIN, this, handlePipeMessage );
 			
 			// The STDLOG pipe from the shell to the logger
-			junction.registerPipe( STDLOG, Junction.OUTPUT, new Pipe() );
+			junction.registerPipe( PipeAwareModule.STDLOG, Junction.OUTPUT, new Pipe() );
 			sendNotification(ApplicationFacade.CONNECT_SHELL_TO_LOGGER, junction );
 
 		}
@@ -78,12 +79,12 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 							
 				case ApplicationFacade.REQUEST_LOG_BUTTON:
 					sendNotification(LogMessage.SEND_TO_LOG,"Requesting log button from LoggerModule.",LogMessage.LEVELS[LogMessage.DEBUG]);
-					junction.sendMessage(STDLOG,new UIQueryMessage(UIQueryMessage.GET,LoggerModule.LOG_BUTTON_UI));
+					junction.sendMessage(PipeAwareModule.STDLOG,new UIQueryMessage(UIQueryMessage.GET,LoggerModule.LOG_BUTTON_UI));
 					break;
 
 				case ApplicationFacade.REQUEST_LOG_WINDOW:
 					sendNotification(LogMessage.SEND_TO_LOG,"Requesting log window from LoggerModule.",LogMessage.LEVELS[LogMessage.DEBUG]);
-					junction.sendMessage(STDLOG,new UIQueryMessage(UIQueryMessage.GET,LoggerModule.LOG_WINDOW_UI));
+					junction.sendMessage(PipeAwareModule.STDLOG,new UIQueryMessage(UIQueryMessage.GET,LoggerModule.LOG_WINDOW_UI));
 					break;
 
 				case  ApplicationFacade.CONNECT_MODULE_TO_SHELL:
@@ -92,14 +93,14 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 					// Connect a module's STDSHELL to the shell's STDIN
 					var module:IPipeAware = note.getBody() as IPipeAware;
 					var moduleToShell:Pipe = new Pipe();
-					module.acceptOutputPipe(JunctionMediator.STDSHELL, moduleToShell);
-					var shellIn:TeeMerge = junction.retrievePipe(JunctionMediator.STDIN) as TeeMerge;
+					module.acceptOutputPipe(PipeAwareModule.STDSHELL, moduleToShell);
+					var shellIn:TeeMerge = junction.retrievePipe(PipeAwareModule.STDIN) as TeeMerge;
 					shellIn.connectInput(moduleToShell);
 					
 					// Connect the shell's STDOUT to the module's STDIN
 					var shellToModule:Pipe = new Pipe();
-					module.acceptInputPipe(JunctionMediator.STDIN, shellToModule);
-					var shellOut:IPipeFitting = junction.retrievePipe(JunctionMediator.STDOUT) as IPipeFitting;
+					module.acceptInputPipe(PipeAwareModule.STDIN, shellToModule);
+					var shellOut:IPipeFitting = junction.retrievePipe(PipeAwareModule.STDOUT) as IPipeFitting;
 					shellOut.connect(shellToModule);
 					break;
 
@@ -137,30 +138,20 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.shell.view
 				{
 					case LoggerModule.LOG_BUTTON_UI:
 						sendNotification(ApplicationFacade.SHOW_LOG_BUTTON, UIQueryMessage(message).component, UIQueryMessage(message).name )
-						junction.sendMessage(STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Log Button on STDSHELL'));
+						junction.sendMessage(PipeAwareModule.STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Log Button on STDSHELL'));
 						break;
 
 					case LoggerModule.LOG_WINDOW_UI:
 						sendNotification(ApplicationFacade.SHOW_LOG_WINDOW, UIQueryMessage(message).component, UIQueryMessage(message).name )
-						junction.sendMessage(STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Log Window on STDSHELL'));
+						junction.sendMessage(PipeAwareModule.STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Log Window on STDSHELL'));
 						break;
 
 					case PrattlerModule.FEED_WINDOW_UI:
 						sendNotification(ApplicationFacade.SHOW_FEED_WINDOW, UIQueryMessage(message).component, UIQueryMessage(message).name )
-						junction.sendMessage(STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Feed Window on STDSHELL'));
+						junction.sendMessage(PipeAwareModule.STDLOG,new LogMessage(LogMessage.INFO,this.multitonKey,'Recieved the Feed Window on STDSHELL'));
 						break;
 				}
 			}
 		}
-		
-		/**
-		 * The Junction for this Module.
-		 */
-		private function get junction():Junction
-		{
-			return viewComponent as Junction;
-		}
-		
-	
 	}
 }

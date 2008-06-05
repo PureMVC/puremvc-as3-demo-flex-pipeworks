@@ -7,19 +7,20 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 {
 	import mx.core.UIComponent;
 	
-	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.JunctionMediator;
+	import org.puremvc.as3.multicore.interfaces.INotification;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Filter;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
+	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
+	import org.puremvc.as3.multicore.utilities.pipes.plumbing.JunctionMediator;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogFilterMessage;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.LogMessage;
+	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.PipeAwareModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.common.UIQueryMessage;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.LoggerModule;
 	import org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.ApplicationFacade;
-	import org.puremvc.as3.multicore.interfaces.INotification;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeFitting;
-	import org.puremvc.as3.multicore.utilities.pipes.interfaces.IPipeMessage;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Filter;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.Junction;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.PipeListener;
-	import org.puremvc.as3.multicore.utilities.pipes.plumbing.TeeMerge;
 	
 	public class LoggerJunctionMediator extends JunctionMediator
 	{
@@ -62,7 +63,7 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 										    );
 			filter.connect(new PipeListener(this,handlePipeMessage));
 			teeMerge.connect(filter);
-			junction.registerPipe( STDIN, Junction.INPUT, teeMerge );
+			junction.registerPipe( PipeAwareModule.STDIN, Junction.INPUT, teeMerge );
 		}
 		
 		/**
@@ -99,13 +100,13 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 				// Send the LogButton UI Component 
 				case ApplicationFacade.EXPORT_LOG_BUTTON:
 					var logButtonMessage:UIQueryMessage = new UIQueryMessage( UIQueryMessage.SET, LoggerModule.LOG_BUTTON_UI, UIComponent(note.getBody()) );
-					var buttonExported:Boolean = junction.sendMessage( STDSHELL, logButtonMessage );
+					var buttonExported:Boolean = junction.sendMessage( PipeAwareModule.STDSHELL, logButtonMessage );
 					break;
 				
 				// Send the LogWindow UI Component 
 				case ApplicationFacade.EXPORT_LOG_WINDOW:
 					var logWindowMessage:UIQueryMessage = new UIQueryMessage( UIQueryMessage.SET, LoggerModule.LOG_WINDOW_UI, UIComponent(note.getBody()) );
-					junction.sendMessage( STDSHELL, logWindowMessage );
+					junction.sendMessage( PipeAwareModule.STDSHELL, logWindowMessage );
 					break;
 				
 				// Add an input pipe (special handling for LoggerModule) 
@@ -113,9 +114,9 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 					var name:String = note.getType();
 					
 					// STDIN is a Merging Tee. Overriding super to handle this.
-					if (name == STDIN) {
+					if (name == PipeAwareModule.STDIN) {
 						var pipe:IPipeFitting = note.getBody() as IPipeFitting;
-						var tee:TeeMerge = junction.retrievePipe(STDIN) as TeeMerge;
+						var tee:TeeMerge = junction.retrievePipe(PipeAwareModule.STDIN) as TeeMerge;
 						tee.connectInput(pipe);
 					} 
 					// Use super for any other input pipe
@@ -154,15 +155,5 @@ package org.puremvc.as3.multicore.demos.flex.pipeworks.modules.logger.view
 				}
 			}
 		}
-		
-		/**
-		 * The Junction for this Module.
-		 */
-		private function get junction():Junction
-		{
-			return viewComponent as Junction;
-		}
-		
-	
 	}
 }
